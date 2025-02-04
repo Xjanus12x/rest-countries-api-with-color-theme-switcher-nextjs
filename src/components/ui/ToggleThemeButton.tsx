@@ -2,7 +2,7 @@
 
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function ToggleThemeButton() {
   const [mounted, setMounted] = useState(false);
