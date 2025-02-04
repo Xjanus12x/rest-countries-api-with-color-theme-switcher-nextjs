@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebounce } from "@/hooks/useDebounce";
 
@@ -23,7 +23,7 @@ export function CountryFilters() {
   );
   const debouncedSearch = useDebounce(localSearch, 200);
 
-  function handleFilter(name: string, value: string) {
+  const handleFilter = useCallback((name: string, value: string) => {
     const params = new URLSearchParams(searchParams);
     if (params.get(name) === value) return;
     if (name) params.set(name, value);
@@ -31,13 +31,13 @@ export function CountryFilters() {
     if (params.get("region") === "All") params.delete(name);
 
     replace(`${pathname}?${params.toString()}`);
-  }
+  }, []);
 
   useEffect(() => {
     if (searchParams.get("query") !== debouncedSearch) {
       handleFilter("query", debouncedSearch);
     }
-  }, [debouncedSearch, searchParams]);
+  }, [debouncedSearch, searchParams, handleFilter]);
 
   return (
     <section className="grid gap-10 sm:grid-cols-[auto_auto]">
