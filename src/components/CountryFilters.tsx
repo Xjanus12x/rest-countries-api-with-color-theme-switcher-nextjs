@@ -23,15 +23,18 @@ export function CountryFilters() {
   );
   const debouncedSearch = useDebounce(localSearch, 200);
 
-  const handleFilter = useCallback((name: string, value: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (params.get(name) === value) return;
-    if (name) params.set(name, value);
-    if (params.get("query") === "") params.delete(name);
-    if (params.get("region") === "All") params.delete(name);
+  const handleFilter = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      if (params.get(name) === value) return;
+      if (name) params.set(name, value);
+      if (params.get("query") === "") params.delete(name);
+      if (params.get("region") === "All") params.delete(name);
 
-    replace(`${pathname}?${params.toString()}`);
-  }, []);
+      replace(`${pathname}?${params.toString()}`);
+    },
+    [pathname, replace, searchParams]
+  );
 
   useEffect(() => {
     if (searchParams.get("query") !== debouncedSearch) {
